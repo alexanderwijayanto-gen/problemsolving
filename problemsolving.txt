@@ -1,0 +1,474 @@
+import React, { useState } from 'react';
+import { 
+  BookOpen, Target, Network, Lightbulb, BarChart3, Presentation, CalendarCheck, 
+  ChevronRight, AlertCircle, CheckCircle2, BrainCircuit, Users, Leaf, Sprout, ShieldAlert
+} from 'lucide-react';
+
+const SidebarItem = ({ icon: Icon, label, isActive, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${
+      isActive 
+        ? 'bg-emerald-600 text-white font-medium shadow-md' 
+        : 'text-gray-600 hover:bg-emerald-50 hover:text-emerald-700'
+    }`}
+  >
+    <Icon size={20} className={isActive ? 'text-white' : 'text-emerald-600'} />
+    <span className="text-sm">{label}</span>
+  </button>
+);
+
+const Card = ({ children, className = '' }) => (
+  <div className={`bg-white rounded-xl shadow-sm border border-gray-100 p-6 ${className}`}>
+    {children}
+  </div>
+);
+
+// --- SECTIONS COMPONENTS ---
+
+const Introduction = () => (
+  <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div>
+      <h2 className="text-3xl font-bold text-gray-800 mb-2">Introduction</h2>
+      <p className="text-gray-600">Selamat datang di Modul Pembelajaran Pemecahan Masalah Berbasis Hipotesis. Sebagai marketer di industri perlindungan tanaman, Anda menghadapi tantangan kompleks setiap hari—mulai dari peluncuran produk baru hingga fluktuasi iklim.</p>
+    </div>
+
+    <div className="grid md:grid-cols-2 gap-6">
+      <Card className="border-l-4 border-l-red-500">
+        <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+          <BrainCircuit className="text-red-500"/> Sistem 1: Pemecahan Masalah CEPAT
+        </h3>
+        <p className="text-sm text-gray-600 mb-4">Otomatis, intuitif, dan seringkali melompat ke kesimpulan ("What You See is All There Is").</p>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><AlertCircle size={16} className="text-red-500 mt-0.5 shrink-0"/> Bertindak tanpa analisis mendalam (Jebakan Othello).</li>
+          <li className="flex items-start gap-2"><AlertCircle size={16} className="text-red-500 mt-0.5 shrink-0"/> Mengandalkan kebiasaan lama untuk masalah baru.</li>
+          <li className="flex items-start gap-2"><AlertCircle size={16} className="text-red-500 mt-0.5 shrink-0"/> Rentan terhadap bias dan "Analysis Paralysis".</li>
+        </ul>
+      </Card>
+
+      <Card className="border-l-4 border-l-emerald-500">
+        <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+          <Target className="text-emerald-500"/> Sistem 2: Pemecahan Masalah LAMBAT
+        </h3>
+        <p className="text-sm text-gray-600 mb-4">Disengaja, analitis, dan membutuhkan proses terstruktur untuk mengatasi bias.</p>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><CheckCircle2 size={16} className="text-emerald-500 mt-0.5 shrink-0"/> Logis dan skeptis terhadap asumsi awal.</li>
+          <li className="flex items-start gap-2"><CheckCircle2 size={16} className="text-emerald-500 mt-0.5 shrink-0"/> Memanfaatkan proses dan disiplin, bukan sekadar insting.</li>
+          <li className="flex items-start gap-2"><CheckCircle2 size={16} className="text-emerald-500 mt-0.5 shrink-0"/> Menghasilkan solusi yang andal dan dapat ditindaklanjuti.</li>
+        </ul>
+      </Card>
+    </div>
+
+    <Card className="bg-emerald-50 border-emerald-100">
+      <h3 className="text-lg font-bold text-emerald-900 mb-4">4 Langkah Problem Solving Berbasis Hipotesis</h3>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { step: 1, title: 'Definisikan Masalah', desc: 'Pahami & petakan masalah utama' },
+          { step: 2, title: 'Strukturkan Isu', desc: 'Buat kerangka logis & pertanyaan' },
+          { step: 3, title: 'Formulasikan Hipotesis', desc: 'Kembangkan asumsi awal' },
+          { step: 4, title: 'Analisis & Rekomendasi', desc: 'Uji dengan data & buat cerita' }
+        ].map((s) => (
+          <div key={s.step} className="bg-white p-4 rounded-lg shadow-sm text-center">
+            <div className="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 font-bold">{s.step}</div>
+            <h4 className="font-semibold text-sm text-gray-800 mb-1">{s.title}</h4>
+            <p className="text-xs text-gray-500">{s.desc}</p>
+          </div>
+        ))}
+      </div>
+    </Card>
+  </div>
+);
+
+const DefineProblem = () => {
+  const [activeTab, setActiveTab] = useState('T');
+  const toscaElements = {
+    T: { title: 'Trouble', icon: AlertCircle, desc: 'Apa gejala nyata yang membuat masalah ini mendesak?', example: 'Kebutuhan petani jagung akan solusi gulma yang aman dan membasmi gulma resisten. Tantangan: Memperkenalkan 3 bahan aktif sebagai standar baru.' },
+    O: { title: 'Owner', icon: Users, desc: 'Siapa yang bertanggung jawab atas masalah ini dan keberhasilan solusinya?', example: 'Direktur Pemasaran atau Manajer Produk PT. ABC.' },
+    S: { title: 'Success Criteria', icon: Target, desc: 'Seperti apa kesuksesan itu jika masalah terpecahkan?', example: 'Mencapai volume penjualan X unit/liter tahun pertama. Kepuasan petani >90%. Pangsa pasar Y% dalam 12-24 bulan.' },
+    C: { title: 'Constraints', icon: ShieldAlert, desc: 'Apa saja batasan yang ada (sumber daya, regulasi, waktu)?', example: 'Kepatuhan izin Kementan, anggaran promosi lapangan yang terbatas, dan harus rilis sebelum musim tanam raya.' },
+    A: { title: 'Actors', icon: Leaf, desc: 'Siapa pemangku kepentingan yang memengaruhi solusi?', example: 'Petani Jagung, Toko Tani (R1/R2/R3), dan Kompetitor produk generik.' }
+  };
+
+  return (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div>
+        <h2 className="text-3xl font-bold text-gray-800 mb-2">Define the Problem</h2>
+        <p className="text-gray-600">Definisi masalah yang baik adalah kunci. Hindari pernyataan kabur, menyisipkan solusi secara prematur, atau menggunakan analogi dangkal (narrow framing).</p>
+      </div>
+
+      <Card>
+        <h3 className="text-xl font-bold text-gray-800 mb-4">Kerangka TOSCA: Studi Kasus PT. ABC</h3>
+        <p className="text-sm text-gray-600 mb-6">Gunakan kerangka TOSCA untuk merumuskan pertanyaan inti peluncuran produk herbisida selektif jagung 3 bahan aktif.</p>
+        
+        <div className="flex flex-wrap gap-2 mb-6">
+          {Object.keys(toscaElements).map(key => (
+            <button
+              key={key}
+              onClick={() => setActiveTab(key)}
+              className={`px-4 py-2 rounded-lg font-bold text-lg transition-colors ${
+                activeTab === key ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-500 hover:bg-emerald-100 hover:text-emerald-700'
+              }`}
+            >
+              {key} - {toscaElements[key].title}
+            </button>
+          ))}
+        </div>
+
+        <div className="bg-emerald-50 p-6 rounded-lg border border-emerald-100">
+          <div className="flex items-center gap-3 mb-3">
+            {React.createElement(toscaElements[activeTab].icon, { size: 24, className: 'text-emerald-600' })}
+            <h4 className="text-xl font-bold text-emerald-900">{toscaElements[activeTab].title}</h4>
+          </div>
+          <p className="text-emerald-800 font-medium mb-4">{toscaElements[activeTab].desc}</p>
+          <div className="bg-white p-4 rounded border border-emerald-100">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Penerapan Kasus PT ABC:</span>
+            <p className="text-gray-700">{toscaElements[activeTab].example}</p>
+          </div>
+        </div>
+
+        <div className="mt-6 bg-gray-800 text-white p-6 rounded-lg">
+          <h4 className="font-bold text-yellow-400 mb-2">Core Question (Output TOSCA)</h4>
+          <p className="text-lg font-light leading-relaxed">
+            "Dalam konteks persaingan pasar herbisida yang ketat, strategi pemasaran dan distribusi apa yang harus diambil PT. ABC agar produk campuran 3 bahan aktif ini dapat mencapai target pangsa pasar [Y]% dalam satu tahun, dengan tetap mempertimbangkan batasan anggaran dan regulasi yang ada?"
+          </p>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+const StructureIssues = () => (
+  <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div>
+      <h2 className="text-3xl font-bold text-gray-800 mb-2">Identify and Structure the Issues</h2>
+      <p className="text-gray-600">Pecah masalah kompleks menjadi elemen-elemen logis menggunakan <strong>Issue Tree</strong> dan pastikan strukturnya <strong>MECE</strong> (Mutually Exclusive, Collectively Exhaustive).</p>
+    </div>
+
+    <div className="grid md:grid-cols-2 gap-6">
+      <Card>
+        <h3 className="text-lg font-bold text-gray-800 mb-3">Mengapa Menggunakan Issue Tree?</h3>
+        <ul className="space-y-3 text-sm text-gray-700">
+          <li className="flex gap-2"><CheckCircle2 size={18} className="text-emerald-600 shrink-0"/> <span><strong>Filter Analisis:</strong> Menyaring informasi berlebih agar fokus pada fakta relevan (menghindari <em>boiling the ocean</em>).</span></li>
+          <li className="flex gap-2"><CheckCircle2 size={18} className="text-emerald-600 shrink-0"/> <span><strong>Peta Jalan:</strong> Membantu merumuskan solusi awal sehingga pencarian data terarah.</span></li>
+          <li className="flex gap-2"><CheckCircle2 size={18} className="text-emerald-600 shrink-0"/> <span><strong>Membagi Pekerjaan:</strong> Masalah besar dibagi menjadi paket kerja yang bisa didelegasikan ke tim (misal: tim riset, tim sales).</span></li>
+        </ul>
+      </Card>
+
+      <Card className="bg-blue-50 border-blue-100">
+        <h3 className="text-lg font-bold text-blue-900 mb-3">Prinsip MECE</h3>
+        <div className="space-y-4">
+          <div>
+            <span className="font-bold text-blue-800 block">Mutually Exclusive</span>
+            <span className="text-sm text-blue-700">Tidak ada tumpang tindih antar komponen isu. Isu harga terpisah dari isu kemanjuran produk.</span>
+          </div>
+          <div>
+            <span className="font-bold text-blue-800 block">Collectively Exhaustive</span>
+            <span className="text-sm text-blue-700">Mencakup seluruh kemungkinan. Jika semua komponen diselesaikan, masalah utama otomatis terpecahkan.</span>
+          </div>
+        </div>
+      </Card>
+    </div>
+
+    <Card>
+      <h3 className="text-xl font-bold text-gray-800 mb-4">Contoh Issue Tree: Peluncuran Herbisida PT. ABC</h3>
+      <div className="overflow-x-auto pb-4">
+        <div className="min-w-[700px] flex gap-4">
+          {/* Level 1 */}
+          <div className="w-1/4 bg-gray-100 p-4 rounded-lg flex items-center shadow-sm border border-gray-200">
+            <p className="font-bold text-sm text-gray-800">Bagaimana mencapai target penjualan Rp10M (15% Market Share) dalam 12 bulan?</p>
+          </div>
+          {/* Level 2 & 3 */}
+          <div className="w-3/4 flex flex-col gap-4">
+            <div className="flex gap-4">
+              <div className="w-1/3 bg-emerald-100 p-3 rounded-lg border border-emerald-200 flex items-center">
+                <p className="font-semibold text-xs text-emerald-900">Optimasi Strategi Harga (Pricing)</p>
+              </div>
+              <div className="w-2/3 flex flex-col gap-2">
+                <div className="bg-white p-2 rounded border border-gray-200 text-xs shadow-sm">End-User Pricing: Apakah dirasa value-for-money dibanding campur sendiri?</div>
+                <div className="bg-white p-2 rounded border border-gray-200 text-xs shadow-sm">Channel Margins: Apakah diskon untuk Toko (R1) cukup mendorong push-strategy?</div>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="w-1/3 bg-emerald-100 p-3 rounded-lg border border-emerald-200 flex items-center">
+                <p className="font-semibold text-xs text-emerald-900">Maksimalisasi Akses & Distribusi (Push)</p>
+              </div>
+              <div className="w-2/3 flex flex-col gap-2">
+                <div className="bg-white p-2 rounded border border-gray-200 text-xs shadow-sm">Ketersediaan merata di Toko Tani sentra jagung sebelum musim tanam?</div>
+                <div className="bg-white p-2 rounded border border-gray-200 text-xs shadow-sm">Kemitraan B2B/Perusahaan untuk amankan baseload volume?</div>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="w-1/3 bg-emerald-100 p-3 rounded-lg border border-emerald-200 flex items-center">
+                <p className="font-semibold text-xs text-emerald-900">Kesadaran & Uji Coba Petani (Pull)</p>
+              </div>
+              <div className="w-2/3 flex flex-col gap-2">
+                <div className="bg-white p-2 rounded border border-gray-200 text-xs shadow-sm">Efektivitas Demoplot untuk buktikan efikasi 3 bahan aktif?</div>
+                <div className="bg-white p-2 rounded border border-gray-200 text-xs shadow-sm">Program bundling benih untuk turunkan keengganan mencoba produk baru?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Card>
+  </div>
+);
+
+const FormulateHypotheses = () => (
+  <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div>
+      <h2 className="text-3xl font-bold text-gray-800 mb-2">Formulate Hypotheses</h2>
+      <p className="text-gray-600">Hipotesis bukanlah sekadar alasan; ia adalah <strong>pernyataan gabungan utuh</strong> (Masalah + Alasan) yang bisa diuji dengan data.</p>
+    </div>
+
+    <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-100">
+      <h3 className="text-xl font-bold text-emerald-900 mb-4 flex items-center gap-2">
+        <Lightbulb className="text-emerald-500"/> Anatomi Hipotesis Sempurna
+      </h3>
+      <div className="flex flex-col md:flex-row gap-4 items-center">
+        <div className="bg-white p-4 rounded-lg shadow-sm flex-1 border border-gray-100">
+          <span className="text-xs font-bold text-red-500 uppercase tracking-wider block mb-1">Kondisi Negatif (Masalah)</span>
+          <p className="font-medium text-gray-800">"Toko Tani (R1) menolak menyetok produk baru..."</p>
+        </div>
+        <div className="text-xl font-bold text-emerald-600">+</div>
+        <div className="bg-white p-4 rounded-lg shadow-sm flex-1 border border-gray-100">
+          <span className="text-xs font-bold text-blue-500 uppercase tracking-wider block mb-1">Fenomena Teramati (Alasan)</span>
+          <p className="font-medium text-gray-800">"...karena margin yang ditawarkan 5% lebih rendah dari produk kompetitor."</p>
+        </div>
+      </div>
+      <div className="mt-4 bg-emerald-600 text-white p-4 rounded-lg text-center font-semibold shadow-md">
+        Hipotesis: Toko Tani menolak menyetok produk karena margin kita kalah saing dibanding kompetitor lokal.
+      </div>
+    </Card>
+
+    <div className="grid md:grid-cols-2 gap-6">
+      <Card>
+        <h3 className="text-lg font-bold text-gray-800 mb-3">Kriteria Hipotesis yang Baik</h3>
+        <ul className="space-y-3 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><ChevronRight size={18} className="text-emerald-600 shrink-0 mt-0.5"/> Harus dapat diuji (testable) dengan data lapangan.</li>
+          <li className="flex items-start gap-2"><ChevronRight size={18} className="text-emerald-600 shrink-0 mt-0.5"/> Mengarahkan pengumpulan data & analisis.</li>
+          <li className="flex items-start gap-2"><ChevronRight size={18} className="text-emerald-600 shrink-0 mt-0.5"/> Dapat diterima oleh manajemen/klien jika valid.</li>
+        </ul>
+      </Card>
+
+      <Card>
+        <h3 className="text-lg font-bold text-gray-800 mb-3">Contoh Hipotesis Agrikultur</h3>
+        <div className="space-y-3">
+          <div className="p-3 bg-gray-50 rounded border border-gray-100">
+            <span className="text-xs font-bold text-emerald-600 uppercase block mb-1">Value-for-Money</span>
+            <p className="text-sm text-gray-700">Petani jagung akan menerima harga premium 3 bahan aktif karena total biaya aplikasi lebih murah dibanding membeli 3 produk terpisah.</p>
+          </div>
+          <div className="p-3 bg-gray-50 rounded border border-gray-100">
+            <span className="text-xs font-bold text-emerald-600 uppercase block mb-1">Bundling Strategy</span>
+            <p className="text-sm text-gray-700">Bundling produk herbisida dengan benih hibrida akan meningkatkan tingkat uji coba (trial rate) secara signifikan.</p>
+          </div>
+        </div>
+      </Card>
+    </div>
+  </div>
+);
+
+const CollectData = () => (
+  <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div>
+      <h2 className="text-3xl font-bold text-gray-800 mb-2">Collect and Analyze Data</h2>
+      <p className="text-gray-600">Riset pasar harus bertujuan untuk <strong>memvalidasi hipotesis</strong>, bukan sekadar mengumpulkan data secara acak.</p>
+    </div>
+
+    <Card>
+      <h3 className="text-xl font-bold text-gray-800 mb-4">Struktur Analisis Riset Pasar: Validasi Produk Pertanian</h3>
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="bg-white border border-gray-200 p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-4">
+            <Users size={24} />
+          </div>
+          <h4 className="font-bold text-gray-800 mb-2">1. Validasi Pain Point Petani (Kualitatif)</h4>
+          <p className="text-sm text-gray-600 mb-3">Melakukan FGD/IDI dengan petani padi. Bukan bertanya "Butuh pestisida apa?", tapi "Apa yang membuat Anda tidak bisa tidur nyenyak?"</p>
+          <div className="bg-gray-50 p-2 text-xs rounded border border-gray-100 text-gray-500">
+            <strong>Target Data:</strong> Ekstraksi emosi (cemas, takut gagal panen) untuk kampanye "Tenang Tanpa Beban".
+          </div>
+        </div>
+
+        <div className="bg-white border border-gray-200 p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center mb-4">
+            <BarChart3 size={24} />
+          </div>
+          <h4 className="font-bold text-gray-800 mb-2">2. Kuantifikasi Masalah Resistensi</h4>
+          <p className="text-sm text-gray-600 mb-3">Survei lapangan atau trial demoplot berdampingan untuk menguji klaim efikasi memutus siklus hama (misal Grup 30).</p>
+          <div className="bg-gray-50 p-2 text-xs rounded border border-gray-100 text-gray-500">
+            <strong>Target Data:</strong> % petani yang menyemprot lebih sering untuk hasil yang sama (bukti resistensi).
+          </div>
+        </div>
+
+        <div className="bg-white border border-gray-200 p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center mb-4">
+            <Network size={24} />
+          </div>
+          <h4 className="font-bold text-gray-800 mb-2">3. Pemetaan Influencer & Channel</h4>
+          <p className="text-sm text-gray-600 mb-3">Wawancara Toko Tani, PPL, dan Lead Farmer untuk memetakan alur kepercayaan pembelian petani.</p>
+          <div className="bg-gray-50 p-2 text-xs rounded border border-gray-100 text-gray-500">
+            <strong>Target Data:</strong> Bukti bahwa Toko Tani adalah <em>point of sales</em> sekaligus <em>point of trust</em>.
+          </div>
+        </div>
+      </div>
+    </Card>
+
+    <Card className="bg-slate-800 text-white border-slate-700">
+      <h3 className="text-lg font-bold text-yellow-400 mb-2">Contoh Temuan Data (Key Findings)</h3>
+      <p className="text-slate-300 text-sm mb-4">Validasi praktik <em>Channel Stuffing</em> di akhir tahun:</p>
+      <div className="bg-slate-700 p-4 rounded-lg border border-slate-600">
+        <p className="italic text-slate-200">"80% tim sales mengakui bobot target <strong>sell-in</strong> mendominasi KPI mereka, sehingga mereka terpaksa memberikan diskon besar di Desember agar distributor menumpuk stok, meski barang tidak terserap petani."</p>
+        <div className="mt-3 flex items-center gap-2 text-emerald-400 font-bold text-sm">
+          <CheckCircle2 size={16}/> Hipotesis terbukti: Sistem bonus merusak ekosistem distribusi.
+        </div>
+      </div>
+    </Card>
+  </div>
+);
+
+const FindingsRecommendations = () => (
+  <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div>
+      <h2 className="text-3xl font-bold text-gray-800 mb-2">Findings & Recommendations</h2>
+      <p className="text-gray-600">Ubah temuan analitis menjadi narasi presentasi (Pitch) yang persuasif menggunakan formula <strong>S-C-R (Situation - Complication - Resolution)</strong>.</p>
+    </div>
+
+    <Card>
+      <h3 className="text-xl font-bold text-gray-800 mb-4">Storylining: The Pitch (Kasus: Incipio)</h3>
+      <div className="space-y-0 border-l-4 border-emerald-500 ml-4 pl-6 relative pb-2">
+        
+        {/* Situation */}
+        <div className="mb-8 relative">
+          <div className="absolute -left-[35px] top-0 w-6 h-6 bg-emerald-500 rounded-full border-4 border-white shadow-sm"></div>
+          <h4 className="font-bold text-gray-800 text-lg mb-1">1. SITUASI (Konteks yang Dipahami Bersama)</h4>
+          <p className="text-gray-600 bg-gray-50 p-3 rounded mt-2 border border-gray-100">
+            "Setiap musim, Bapak Petani bekerja keras di bawah terik matahari. Harapannya satu: panen melimpah agar keluarga sejahtera dan dapur tetap mengepul."
+          </p>
+        </div>
+
+        {/* Complication */}
+        <div className="mb-8 relative">
+          <div className="absolute -left-[35px] top-0 w-6 h-6 bg-red-500 rounded-full border-4 border-white shadow-sm"></div>
+          <h4 className="font-bold text-gray-800 text-lg mb-1">2. KOMPLIKASI (Masalah yang Menjadi Beban)</h4>
+          <p className="text-gray-600 bg-red-50 p-3 rounded mt-2 border border-red-100">
+            "Namun, harapan itu seringkali dihantui oleh penggerek batang. Hama ini semakin pintar dan kebal. Pestisida lama disemprot berkali-kali pun hasilnya sama saja. Hati jadi cemas, pikiran terbebani, dan biaya membengkak. Kerja keras terasa sia-sia."
+          </p>
+        </div>
+
+        {/* Resolution */}
+        <div className="relative">
+          <div className="absolute -left-[35px] top-0 w-6 h-6 bg-blue-500 rounded-full border-4 border-white shadow-sm"></div>
+          <h4 className="font-bold text-gray-800 text-lg mb-1">3. RESOLUSI (Incipio sebagai Solusi Total)</h4>
+          <p className="text-gray-600 bg-blue-50 p-3 rounded mt-2 border border-blue-100">
+            "Karena itulah Syngenta menghadirkan Incipio. Dengan teknologi terbaru, Incipio bekerja dengan cara yang berbeda, langsung memutus siklus hama yang kebal sekalipun. Cukup satu kali aplikasi, Incipio melindungi padi Anda untuk waktu yang lama... menjadikan hati dan pikiran Bapak TENANG TANPA BEBAN."
+          </p>
+        </div>
+
+      </div>
+    </Card>
+  </div>
+);
+
+const PlanningWork = () => (
+  <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div>
+      <h2 className="text-3xl font-bold text-gray-800 mb-2">Planning the Work</h2>
+      <p className="text-gray-600">Rencana kerja (Workplan) menjembatani pertanyaan strategis menjadi langkah-langkah analitis konkret yang diatur berdasarkan tenggat waktu.</p>
+    </div>
+
+    <Card className="overflow-hidden p-0 border border-gray-200">
+      <div className="bg-emerald-600 text-white p-4">
+        <h3 className="text-lg font-bold flex items-center gap-2"><CalendarCheck size={20}/> Matriks Rencana Kerja (Contoh)</h3>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-sm">
+          <thead className="bg-gray-50 border-b border-gray-200 text-gray-600">
+            <tr>
+              <th className="p-4 font-semibold w-1/4">Isu Utama / Sub-Isu</th>
+              <th className="p-4 font-semibold w-1/4">Hipotesis / Analisis</th>
+              <th className="p-4 font-semibold w-1/4">Aktivitas / Sumber Data</th>
+              <th className="p-4 font-semibold w-1/4">Output (Storyline) & PIC</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            <tr className="hover:bg-gray-50 transition-colors">
+              <td className="p-4 text-gray-800">Bagaimana mengoptimalkan margin Toko Tani (R1)?</td>
+              <td className="p-4 text-gray-600">Membutuhkan diskon distributor &gt;5% dibanding kompetitor generik.</td>
+              <td className="p-4 text-gray-600">Survei daftar harga distributor (price lists), wawancara R1 sentra jagung.</td>
+              <td className="p-4">
+                <span className="block font-medium text-emerald-600">Slide: Grafik Perbandingan Margin</span>
+                <span className="text-xs text-gray-500">PIC: Trade Marketing (Rabu)</span>
+              </td>
+            </tr>
+            <tr className="hover:bg-gray-50 transition-colors">
+              <td className="p-4 text-gray-800">Apa potensi pengurangan biaya bagi petani? (Group 30 Insecticide)</td>
+              <td className="p-4 text-gray-600">Aktivitas residu panjang menurunkan jumlah aplikasi semprot per musim.</td>
+              <td className="p-4 text-gray-600">Data uji coba plot kecil, rekaman semprotan petani, laporan IRAC.</td>
+              <td className="p-4">
+                <span className="block font-medium text-emerald-600">Slide: Analisis Biaya Manfaat per Hektar</span>
+                <span className="text-xs text-gray-500">PIC: Tim Agronomi (Jumat)</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </Card>
+  </div>
+);
+
+
+// --- MAIN APP COMPONENT ---
+
+export default function App() {
+  const [activeSection, setActiveSection] = useState('intro');
+
+  const renderSection = () => {
+    switch (activeSection) {
+      case 'intro': return <Introduction />;
+      case 'define': return <DefineProblem />;
+      case 'structure': return <StructureIssues />;
+      case 'formulate': return <FormulateHypotheses />;
+      case 'collect': return <CollectData />;
+      case 'findings': return <FindingsRecommendations />;
+      case 'planning': return <PlanningWork />;
+      default: return <Introduction />;
+    }
+  };
+
+  return (
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-50 font-sans">
+      
+      {/* Sidebar Navigation */}
+      <nav className="w-full md:w-72 bg-white border-r border-gray-200 flex flex-col shrink-0 overflow-y-auto">
+        <div className="p-6 pb-4 border-b border-gray-100 sticky top-0 bg-white z-10">
+          <div className="flex items-center gap-2 text-emerald-700 mb-2">
+            <Sprout size={28} />
+            <h1 className="text-xl font-bold tracking-tight">AgriSolve Pro</h1>
+          </div>
+          <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Hypothesis-Driven Problem Solving</p>
+        </div>
+        
+        <div className="p-4 space-y-2 flex-grow">
+          <SidebarItem icon={BookOpen} label="1. Introduction" isActive={activeSection === 'intro'} onClick={() => setActiveSection('intro')} />
+          <SidebarItem icon={Target} label="2. Define the Problem" isActive={activeSection === 'define'} onClick={() => setActiveSection('define')} />
+          <SidebarItem icon={Network} label="3. Structure the Issues" isActive={activeSection === 'structure'} onClick={() => setActiveSection('structure')} />
+          <SidebarItem icon={Lightbulb} label="4. Formulate Hypotheses" isActive={activeSection === 'formulate'} onClick={() => setActiveSection('formulate')} />
+          <SidebarItem icon={BarChart3} label="5. Collect & Analyze Data" isActive={activeSection === 'collect'} onClick={() => setActiveSection('collect')} />
+          <SidebarItem icon={Presentation} label="6. Findings & Recommendations" isActive={activeSection === 'findings'} onClick={() => setActiveSection('findings')} />
+          <SidebarItem icon={CalendarCheck} label="7. Planning the Work" isActive={activeSection === 'planning'} onClick={() => setActiveSection('planning')} />
+        </div>
+
+        <div className="p-4 border-t border-gray-100 bg-gray-50 text-xs text-gray-500 text-center">
+          Modul Esensial Marketer Pertanian <br/> 2025 Edition
+        </div>
+      </nav>
+
+      {/* Main Content Area */}
+      <main className="flex-1 p-6 md:p-10 lg:p-12 overflow-y-auto bg-slate-50">
+        <div className="max-w-4xl mx-auto">
+          {renderSection()}
+        </div>
+      </main>
+
+    </div>
+  );
+}
